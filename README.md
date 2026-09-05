@@ -12,7 +12,7 @@
 ## ✨ 特性
 
 - **像素级还原** — 使用原站相同的字体（Novecentosanswide / Bender / Oswald / SourceHanSans）和 CDN 图片资源
-- **全屏滚动** — 6 个完整 Section，`scroll-snap` 整页滚动体验
+- **锁定式整屏翻页** — 页面状态机统一处理滚轮、键盘、触摸、导航与圆点；720ms 遮罩转场期间锁定重复输入
 - **Loading 动画** — 渐进式加载条 + 百分比计数 + 淡出过渡
 - **Swiper 轮播** — Banner 自动轮播 + 干员卡片横向滚动
 - **丰富的动画** — 淡入、滑入、缩放、交错入场、滚动提示等多处 CSS 动效
@@ -62,6 +62,17 @@ npx serve .
 # 然后访问 http://localhost:8080
 ```
 
+> 请通过 HTTP 服务器运行，不建议直接双击打开 `index.html`：页面依赖 ES Module 脚本和 CDN 资源。
+
+### 翻页控制
+
+- 鼠标滚轮 / 触控板上下滚动
+- `↑` / `↓`、`PageUp` / `PageDown`、`Home` / `End`
+- 触摸屏上下滑动
+- 顶部导航、右侧圆点与首页 `SCROLL` 控件
+
+每次翻页以 720ms 为一个锁定周期：当前页缩放位移离场、目标页反向进入，同时由上下分屏遮罩完成切换。
+
 ---
 
 ## 🛠️ 技术栈
@@ -70,9 +81,9 @@ npx serve .
 |------|------|
 | **HTML5** | 页面结构 |
 | **CSS3** | 样式、动画、响应式布局 |
-| **JavaScript** | 滚动监听、动画触发、交互逻辑 |
+| **JavaScript ES Modules** | 翻页状态机、动画触发与输入控制 |
 | **Swiper 11** | Banner 轮播与干员卡片滚动 |
-| **IntersectionObserver API** | Section 可见性检测 |
+| **CSS transforms / keyframes** | 页面进出场与分屏遮罩翻页动画 |
 
 ---
 
@@ -80,9 +91,12 @@ npx serve .
 
 ```
 arknights-clone/
-├── index.html      # 主页面（含全部 CSS + JS，单文件部署）
-├── README.md       # 项目说明
-└── ARK_TODO.md     # 开发任务清单
+├── index.html            # 页面结构与第三方资源引用
+├── assets/
+│   ├── css/main.css      # 字体、视觉布局、响应式样式与翻页遮罩
+│   └── js/app.js         # 页面状态机、输入控制、Loading 与 Swiper 初始化
+├── README.md             # 项目说明
+└── ARK_TODO.md           # 开发任务清单
 ```
 
 ---
