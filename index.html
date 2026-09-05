@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no"/>
+<title>明日方舟 - Arknights</title>
+<meta name="description" content="《明日方舟》是一款魔物主题的策略手游。"/>
+<meta name="theme-color" content="#000000"/>
+<meta name="color-scheme" content="dark"/>
+<link rel="icon" href="https://web.hycdn.cn/favicon.ico" type="image/x-icon"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+<style>
+/* ===== FONTS ===== */
+@font-face{font-family:Novecentosanswide-Medium;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Novecentosanswide-Medium.7a5c757a.woff2) format("woff2")}
+@font-face{font-family:Novecentosanswide-DemiBold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Novecentosanswide-DemiBold.e7b6abe4.woff2) format("woff2")}
+@font-face{font-family:Novecentosanswide-Bold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Novecentosanswide-Bold.9c78a9fd.woff2) format("woff2")}
+@font-face{font-family:Novecentosanswide-UltraBold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Novecentosanswide-UltraBold.e5e00ac9.woff2) format("woff2")}
+@font-face{font-family:Bender-Regular;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Bender-Regular.6950ba72.woff2) format("woff2")}
+@font-face{font-family:Bender-Bold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Bender-Bold.b4c7998a.woff2) format("woff2")}
+@font-face{font-family:Oswald-Medium;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Oswald-Medium.99836e81.woff2) format("woff2")}
+@font-face{font-family:Oswald-DemiBold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Oswald-DemiBold.633163ca.woff2) format("woff2")}
+@font-face{font-family:SourceHanSans-Regular;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/SourceHanSansSC-Regular.850c7fae.woff2) format("woff2")}
+@font-face{font-family:SourceHanSans-Bold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/SourceHanSansSC-Bold.5255c6b6.woff2) format("woff2")}
+@font-face{font-family:SourceHanSans-Heavy;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/SourceHanSansSC-Heavy.a894e685.woff2) format("woff2")}
+@font-face{font-family:SourceHanSans-Medium;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/SourceHanSansSC-Medium.ccb4ab24.woff2) format("woff2")}
+
+/* ===== RESET & BASE ===== */
+:root{color-scheme:dark;--cyan:#18d1ff;--cyan-dark:#06bbff;--bg-dark:#000;--bg-gray:#272727;--text-gray:#ababab;--text-light:#d2d2d2}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent;font-family:sans-serif}
+body,html{background-color:#000;color:#fff;width:100%;height:100%;overflow:hidden;font-size:16px}
+a{color:inherit;text-decoration:none}
+img{display:block;width:100%;height:auto}
+button{background:none;border:none;color:inherit;cursor:pointer;font:inherit}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:0;height:0}
+
+/* ===== LOADING SCREEN ===== */
+.loading-screen{position:fixed;left:0;top:0;width:100%;height:100%;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .8s,visibility .8s}
+.loading-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loading-inner{text-align:center}
+.loading-logo{font-family:Novecentosanswide-Bold;font-size:3rem;color:#fff;margin-bottom:2rem;letter-spacing:.3em}
+.loading-bar-track{width:20rem;height:2px;background:#333;margin:0 auto 1rem;position:relative;overflow:hidden}
+.loading-bar-fill{height:100%;background:var(--cyan);width:0%;transition:width .3s}
+.loading-text{font-family:Bender-Regular;font-size:.75rem;color:var(--cyan);letter-spacing:.1em}
+.loading-info{font-family:Novecentosanswide-Medium;font-size:.625rem;color:#666;margin-top:1.5rem;letter-spacing:.5em}
+
+/* ===== PAGE WRAPPER ===== */
+.page-wrapper{position:relative;width:100%;height:100%;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;scroll-snap-type:y mandatory}
+.page-wrapper.loaded{scroll-snap-type:y mandatory}
+.section{position:relative;width:100%;height:100vh;min-height:100vh;scroll-snap-align:start;overflow:hidden}
+
+/* ===== NAVIGATION ===== */
+.navbar{position:fixed;top:0;left:0;width:100%;z-index:100;height:4.25rem;display:flex;align-items:center;pointer-events:none;transition:opacity .6s}
+.navbar>*{pointer-events:all;position:relative}
+.navbar::before{content:"";display:block;position:absolute;top:0;left:0;width:100%;height:100%;transition:opacity .6s;background-image:linear-gradient(0deg,transparent,rgba(0,0,0,.6),rgba(0,0,0,.8))}
+.navbar.nav-transparent::before{opacity:0}
+.navbar-logo{cursor:pointer;width:7rem;color:#fff;margin-left:3rem;margin-right:auto;position:relative;z-index:1}
+.navbar-logo svg{width:100%;height:auto}
+.nav-links{display:flex;gap:0;position:relative;z-index:1}
+.nav-links a{margin:0 1.5rem;cursor:pointer;transition:color .3s;text-align:center}
+.nav-links a .nav-en{font-family:Oswald-Medium;font-size:1.25rem;line-height:1.2}
+.nav-links a .nav-zh{font-family:SourceHanSans-Medium;font-size:.75rem}
+.nav-links a:hover,.nav-links a.active{color:var(--cyan)}
+.nav-icons{display:flex;width:10rem;height:100%;position:relative;z-index:1}
+.nav-icon{flex:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .3s;color:#c4c2c2}
+.nav-icon svg{height:1.5rem;width:auto}
+.nav-icon:hover{color:var(--cyan)}
+
+/* ===== SIDE DOTS ===== */
+.side-dots{position:fixed;right:2rem;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:1rem}
+.side-dot{width:.5rem;height:.5rem;border-radius:50%;background:#555;cursor:pointer;transition:background .3s,transform .3s}
+.side-dot:hover{background:#fff;transform:scale(1.3)}
+.side-dot.active{background:var(--cyan);transform:scale(1.3)}
+
+/* ===== SECTION 0: HERO ===== */
+.hero-section{background:#000}
+.hero-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-image:url(https://web.hycdn.cn/arknights/official/_next/static/media/bg.8954cef1.jpg);background-size:cover;background-position:50%;transition:transform 8s ease-out}
+.hero-section.in-view .hero-bg{transform:scale(1.05)}
+.hero-canvas{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.hero-mask-left{position:absolute;left:0;bottom:0;opacity:.78;width:40%;height:80%;background:linear-gradient(to right,rgba(0,0,0,.7),transparent);pointer-events:none}
+.hero-mask-right{position:absolute;right:0;bottom:0;opacity:.25;width:40%;height:80%;background:linear-gradient(to left,rgba(0,0,0,.7),transparent);pointer-events:none}
+.hero-bottom-gradient{position:absolute;left:0;bottom:0;width:100%;height:12rem;background-image:linear-gradient(0deg,#000,transparent);pointer-events:none}
+
+.hero-content{position:absolute;left:4.5rem;bottom:2.75rem;z-index:5}
+.hero-title{display:flex;align-items:flex-end;gap:1.5rem}
+.hero-title-text{font-family:Novecentosanswide-UltraBold;font-size:5.5rem;line-height:.75}
+.hero-title-sub{display:flex;flex-direction:column;font-family:Novecentosanswide-Medium}
+.hero-title-sub .rhodes{font-size:1.125rem}
+.hero-title-sub .url-text{font-size:.75rem}
+.hero-title-sub::after{content:"";display:block;width:6rem;height:1px;background:#fff;margin-top:auto}
+.hero-copyright{margin-top:2rem;width:7.875rem}
+
+.hero-right{position:absolute;right:3rem;bottom:5.625rem;width:10.5rem;display:flex;align-items:center;justify-content:space-between;z-index:5}
+.hero-qr{display:flex;align-items:center}
+.hero-qr-img{height:4rem;width:auto;border:1px solid #000}
+.hero-qr-label{margin-right:.5rem;font-family:SourceHanSans-Regular;font-size:.625rem;line-height:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-shadow:0 0 .5rem #000;height:4rem}
+
+/* ===== SECTION 1: INFORMATION ===== */
+.info-section{background:#000}
+.info-section .info-inner{position:relative;width:100%;height:100%}
+.info-banner{position:absolute;top:6rem;right:10rem;width:52%;height:65%;-webkit-mask:linear-gradient(90deg,transparent,#fff 20%);mask:linear-gradient(90deg,transparent,#fff 20%);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.info-banner img{width:100%;height:100%;object-fit:cover;object-position:center}
+
+.info-left{position:absolute;left:0;top:6rem;width:30%;height:70%}
+.info-left-inner{height:100%;position:relative;padding-top:2.5rem;padding-left:3.875rem}
+.info-bg-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);mix-blend-mode:overlay}
+.info-title-bg{position:absolute;top:100%;left:3rem;white-space:nowrap;overflow:hidden;display:flex;align-items:flex-end;height:.95em;font-family:Oswald-Medium;font-size:7rem;letter-spacing:-.05em;color:#242424;pointer-events:none}
+
+.breaking-news{position:absolute;left:3.875rem;bottom:0;width:60%}
+.bn-label{display:flex;margin-bottom:.5rem}
+.bn-label span{font-family:Oswald-Medium;font-size:.625rem;color:var(--cyan);letter-spacing:.2em}
+.bn-title{font-size:2rem;font-weight:700;letter-spacing:2px;line-height:1.3}
+.bn-date{font-family:Bender-Regular;letter-spacing:1px;margin-top:.5rem}
+.bn-url{font-family:Novecentosanswide-Medium;font-size:.75rem;letter-spacing:2px;color:#888;margin-top:.25rem}
+.bn-btn{margin-top:1.5rem;cursor:pointer;width:14rem;height:3.5rem;padding:0 1.75rem 0 1rem;display:flex;align-items:center;transition:background-color .3s,color .3s;background-color:var(--cyan);color:#000;font-family:SourceHanSans-Bold;font-size:1.125rem}
+.bn-btn:hover{background:#fff}
+.bn-btn .arrow{margin-left:auto;width:.5rem}
+
+/* News tabs */
+.news-tabs{display:flex;gap:.5rem;margin-top:1.5rem}
+.news-tab{cursor:pointer;font-family:SourceHanSans-Bold;display:flex;align-items:center;padding:0 .5rem;transition:color .3s,background-color .3s;font-size:.875rem}
+.news-tab.active{color:#000;background-color:var(--cyan)}
+.news-tab:hover:not(.active){color:var(--cyan)}
+.news-list{margin-top:.5rem}
+.news-item{cursor:pointer;height:5rem;border-bottom:1px solid rgba(255,255,255,.3);display:flex;align-items:center;transition:background .2s}
+.news-item:hover{background:rgba(255,255,255,.05)}
+.news-item .news-cat{white-space:nowrap;font-family:SourceHanSans-Bold;font-size:1rem;color:var(--cyan);width:4rem}
+.news-item .news-meta{flex:auto;margin-left:1rem}
+.news-item .news-date{font-family:Bender-Regular;font-size:.75rem;letter-spacing:1px;color:var(--text-gray)}
+.news-item .news-title-text{margin-top:.125rem;font-size:1rem;font-weight:700;letter-spacing:1px;max-height:2.8em;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.news-more-btn{margin-top:1.5rem;cursor:pointer;width:8rem;height:1.5rem;padding:0 .625rem;display:flex;align-items:center;font-family:Bender-Bold;font-size:.75rem;transition:background-color .3s,color .3s;background-color:#585858;color:var(--text-light)}
+.news-more-btn:hover{background:#fff;color:#000}
+
+/* ===== SECTION 2: OPERATOR ===== */
+.operator-section{background:#272727}
+.operator-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-image:url(https://web.hycdn.cn/arknights/official/_next/static/media/bg2.e562d9ae.png);background-size:cover;background-position:50%}
+.operator-bg::before{content:"";display:block;position:absolute;left:0;bottom:0;width:100%;height:11.25rem;background:#272727}
+.operator-char-img{position:absolute;z-index:4;left:60%;top:30%;height:100%}
+.operator-char-img img{width:auto;height:100%}
+.operator-gradient-bottom{position:absolute;z-index:4;left:0;bottom:0;width:100%;height:11.25rem;background-image:linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,.5))}
+.operator-gradient-bottom::after{content:"";display:block;position:absolute;left:0;top:0;width:100%;height:1px;background-image:linear-gradient(90deg,transparent,rgba(255,255,255,.2))}
+
+.operator-header{position:absolute;z-index:2;font-family:Oswald-Medium;left:9.125rem;top:12.5rem;color:#fff}
+.operator-header .op-prefix{font-size:.875rem}
+.operator-header .op-title{margin-top:.5rem;font-size:1.5rem}
+
+.operator-info{position:absolute;z-index:5;left:9.25rem;bottom:7.5rem}
+.operator-name-block{position:relative}
+.operator-name-bg{position:absolute;top:3.75rem;height:4.5rem;opacity:.34;overflow:hidden}
+.operator-name-bg span{font-family:Oswald-DemiBold;font-size:3rem}
+.operator-name-row{display:flex;align-items:flex-end;position:relative}
+.operator-name-zh{font-family:SourceHanSans-Bold;font-size:3.75rem}
+.operator-name-en{font-family:Novecentosanswide-Bold;font-size:1.25rem;margin-bottom:.25rem}
+.operator-faction{margin-left:1.5rem;height:5rem}
+.operator-faction img{height:100%;width:auto}
+
+.operator-voice{margin-top:1.75rem;display:flex;align-items:center}
+.voice-box{width:14rem;height:2.75rem;background:rgba(4,4,4,.9);display:flex}
+.voice-icon{width:2.75rem;margin-right:1.25rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .3s;color:var(--cyan)}
+.voice-icon svg{width:1.5rem;height:1.5rem}
+.voice-label{font-family:Oswald-Medium;font-size:.75rem;color:var(--cyan)}
+.voice-name{font-family:SourceHanSans-Regular;font-size:.875rem;background:#000;border-left:4px solid var(--cyan);padding:.5rem 0 .5rem .75rem;margin-top:.25rem}
+.voice-waveform{width:13rem;height:auto;margin-left:3.75rem}
+
+.operator-desc{margin-top:2rem;width:33.625rem;padding:.875rem 3.75rem 1.125rem;background:#000;white-space:pre-wrap;font-family:SourceHanSans-Regular;font-size:1.125rem;line-height:1.4;color:var(--text-gray)}
+
+/* Operator swiper */
+.operator-swiper-wrap{margin-top:1.25rem;margin-left:-2rem;width:33.625rem}
+.operator-card{cursor:pointer;position:relative;width:7rem;height:11rem;margin-top:.5rem}
+.operator-card .card-corner{position:absolute;right:-.375rem;top:-.5rem;border-color:var(--cyan) var(--cyan) transparent transparent;border-style:solid;border-width:1rem;transition:opacity .3s;opacity:0}
+.operator-card .card-border{display:block;position:absolute;top:0;left:0;width:100%;height:100%;box-sizing:border-box;border:.5rem solid #555}
+.operator-card .card-img{position:absolute;width:100%;height:100%;filter:drop-shadow(-.5rem .5rem 1rem #000);overflow:hidden}
+.operator-card .card-img img{width:100%;height:auto;margin:0 auto}
+.operator-card .card-name{position:absolute;left:.375rem;bottom:.75rem;filter:drop-shadow(0 0 .5rem #000) drop-shadow(0 0 .5rem #000);transition:color .3s;color:#b0b0b0}
+.operator-card .card-name::before{display:block;width:4rem;height:.375rem;background:rgba(24,209,255,.5);position:absolute;left:0;bottom:0}
+.operator-card .card-name span{position:relative;display:block;font-family:SourceHanSans-Medium;font-size:.875rem}
+.operator-card.active .card-corner{opacity:1}
+.operator-card.active .card-border{border-color:#fff}
+.operator-card.active .card-name{color:#fff}
+.operator-card.active::after{content:"";display:block;position:absolute;top:0;left:0;width:100%;height:100%;background:#fff;animation:cardFlash 1s forwards}
+@keyframes cardFlash{0%{opacity:1}100%{opacity:0}}
+
+/* Elite phases */
+.elite-phases{position:absolute;z-index:5;right:14.75rem;bottom:11.25rem;transform:translateX(100%)}
+.elite-phase{cursor:pointer;height:4rem;padding:0 1.5rem;border-left:.5rem solid;display:flex;align-items:center;transition:color .3s;color:var(--text-gray)}
+.elite-phase:hover{color:#fff}
+.elite-phase svg{width:3rem}
+.elite-phase.active{color:var(--cyan)}
+
+/* ===== SECTION 3: WORLD ===== */
+.world-section{background:#272727}
+.world-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-image:url(https://web.hycdn.cn/arknights/official/_next/static/media/bg2.e562d9ae.png);background-size:cover;background-position:50%}
+.world-bg::before{content:"";display:block;position:absolute;left:0;bottom:0;width:100%;height:100%;background:#101010;opacity:.85}
+
+.world-concepts{position:absolute;z-index:3;left:9rem;top:20%;width:40rem}
+.concept-item{cursor:pointer;height:6rem;padding-bottom:.75rem;border-bottom:1px solid #fff;display:flex;align-items:flex-end;position:relative;line-height:1;transition:transform .8s,opacity .8s;transform:translateX(-100%);opacity:0}
+.concept-item.in-view{transform:translateX(0);opacity:1}
+.concept-item .concept-bg-text{position:absolute;font-family:Novecentosanswide-Bold;font-size:4.5rem;color:rgba(24,209,255,.25);right:.75rem;bottom:.75rem;transition:opacity .3s;opacity:0}
+.concept-item:hover .concept-bg-text{opacity:1}
+.concept-item .concept-zh{position:relative;font-family:SourceHanSans-Bold;font-size:2.5rem;text-shadow:0 0 1em #000;transition:color .3s,transform .3s;color:var(--text-gray)}
+.concept-item:hover .concept-zh{transform:translateX(2rem);color:#fff}
+.concept-item .concept-en{margin-left:1.5rem;position:relative;font-family:Novecentosanswide-Bold;font-size:1.25rem;text-shadow:0 0 1em #000;transition:color .3s,transform .3s;color:var(--text-gray)}
+.concept-item:hover .concept-en{transform:translateX(2rem);color:#fff}
+
+.world-detail{position:absolute;z-index:3;left:54%;top:45%;width:30rem}
+.world-detail-line{position:absolute;height:1px;width:30rem}
+.world-detail-title{position:absolute;bottom:3rem;font-family:SourceHanSans-Bold;font-size:3.75rem;overflow:hidden}
+.world-detail-subtitle{position:absolute;bottom:1rem;font-family:Novecentosanswide-Bold;font-size:2rem;overflow:hidden}
+.world-detail-desc{position:absolute;top:1rem;width:100%;font-family:SourceHanSans-Regular;font-size:1rem;overflow:hidden}
+
+.world-arrows{cursor:pointer;position:absolute;z-index:2;top:48%;opacity:.7;transition:opacity .3s}
+.world-arrows:hover{opacity:1}
+.world-arrows.left{left:6.625rem}
+.world-arrows.right{right:17.25rem}
+.world-arrows svg{width:2rem}
+
+.world-bottom-text{position:absolute;z-index:2;bottom:11.25rem;left:9rem;white-space:nowrap;overflow:hidden;display:flex;align-items:flex-end;height:.95em;font-family:Oswald-Medium;font-size:7rem;letter-spacing:-.05em;color:#242424}
+
+.world-progress{position:absolute;z-index:2;left:0;bottom:11.25rem;width:100%;display:flex;height:.5rem;padding-right:17.25rem}
+.progress-track{flex:auto;position:relative;display:flex;cursor:pointer}
+.progress-seg{flex:1;background:#5a5a5a;transition:background .3s}
+.progress-seg:hover{background:#ababab}
+.progress-fill{position:absolute;left:0;top:0;height:100%;background:var(--cyan);transition:width .3s}
+
+.world-back-btn{cursor:pointer;position:absolute;z-index:4;width:17rem;height:3.75rem;background:#585858;right:0;bottom:11.25rem;transform:translateY(50%);display:flex;align-items:center;justify-content:space-between;padding-left:4.5rem;padding-right:3rem;transition:color .3s,background-color .3s}
+.world-back-btn:hover{background:#fff;color:#000}
+.world-back-btn .back-zh{font-family:SourceHanSans-Bold;font-size:1.25rem}
+.world-back-btn .back-en{font-family:Bender-Bold;font-size:.75rem}
+
+/* ===== SECTION 4: MEDIA ===== */
+.media-section{background:#000;position:relative}
+.media-terra{position:absolute;top:0;left:0;width:100%;height:100%}
+.media-grid{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-wrap:wrap}
+.media-card{position:relative;cursor:pointer;overflow:hidden}
+.media-card .media-card-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.media-card:hover .media-card-img{transform:scale(1.05)}
+.media-card .media-card-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.3);transition:background .3s}
+.media-card:hover .media-card-overlay{background:rgba(0,0,0,.1)}
+.media-card .media-card-label{position:absolute;bottom:1rem;left:1rem;z-index:2}
+.media-card .media-card-label img{height:2rem;width:auto;margin-bottom:.25rem}
+.media-card .media-card-label span{font-family:Novecentosanswide-Bold;font-size:.75rem;letter-spacing:.1em}
+
+.media-center-panel{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;text-align:center}
+.media-center-title{font-family:Novecentosanswide-Bold;font-size:2rem;letter-spacing:.3em;margin-bottom:1rem}
+.media-center-subtitle{font-family:SourceHanSans-Bold;font-size:2rem;margin-bottom:.5rem}
+.media-center-desc{font-family:SourceHanSans-Regular;font-size:1rem;color:var(--text-gray)}
+.media-center-url{font-family:Novecentosanswide-Medium;font-size:.75rem;color:#666;letter-spacing:.15em;margin-top:.5rem}
+
+/* ===== SECTION 5: MORE ===== */
+.more-section{background:#111}
+.more-inner{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.more-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.more-card{position:relative;width:22rem;height:13rem;cursor:pointer;overflow:hidden;background:#1a1a1a;transition:transform .3s}
+.more-card:hover{transform:scale(1.03)}
+.more-card .card-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-size:cover;background-position:center;opacity:.6;transition:opacity .3s}
+.more-card:hover .card-bg{opacity:.8}
+.more-card .card-content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem}
+.more-card .card-name{font-family:SourceHanSans-Bold;font-size:1.5rem;color:#fff}
+.more-card .card-en{font-family:Novecentosanswide-DemiBold;font-size:.875rem;color:var(--text-gray);margin-top:.25rem}
+.more-card .card-view-more{font-size:.75rem;color:var(--text-gray);margin-top:.5rem}
+.more-card .card-icon{position:absolute;top:1rem;right:1rem;width:2.5rem;height:2.5rem;background-size:contain;background-repeat:no-repeat}
+
+/* Derivative links */
+.deriv-links{display:flex;gap:1.5rem;margin-top:2rem}
+.deriv-link{display:flex;align-items:center;gap:.75rem;cursor:pointer;padding:.75rem 1.5rem;border:1px solid #333;transition:border-color .3s}
+.deriv-link:hover{border-color:#fff}
+.deriv-link .deriv-name-zh{font-family:SourceHanSans-Medium;font-size:.875rem}
+.deriv-link .deriv-name-en{font-family:Bender-Regular;font-size:.75rem;color:#999}
+
+/* ===== SECTION 6: FOOTER ===== */
+.footer-section{background:#000;height:40vh;min-height:300px;display:flex;align-items:center;justify-content:center;position:relative}
+.footer-inner{text-align:center}
+.footer-logo{width:12rem;margin:0 auto 2rem;color:#fff}
+.footer-logo svg{width:100%;height:auto}
+.footer-copyright{width:8rem;margin:0 auto 2rem}
+.footer-loading{display:flex;align-items:center;gap:.5rem;font-family:Novecentosanswide-DemiBold;font-size:1rem;color:var(--cyan)}
+.footer-loading .loading-anim{display:flex;gap:.15rem}
+.footer-loading .loading-anim span{display:block;width:.35rem;height:.35rem;background:var(--cyan);animation:loadDot 1.5s infinite}
+.footer-loading .loading-anim span:nth-child(2){animation-delay:.2s}
+.footer-loading .loading-anim span:nth-child(3){animation-delay:.4s}
+@keyframes loadDot{0%,100%{opacity:.3}50%{opacity:1}}
+.footer-url{font-family:Novecentosanswide-Medium;font-size:.75rem;color:#555;letter-spacing:.15em;margin-top:1rem}
+
+/* ===== SCROLL INDICATOR ===== */
+.scroll-indicator{position:absolute;z-index:6;right:5.5rem;top:44%;width:10rem;white-space:nowrap}
+.scroll-indicator .page-num{color:var(--cyan);font-family:Novecentosanswide-DemiBold;font-size:5rem;line-height:.55}
+.scroll-indicator .page-total{margin-top:-1.75em;text-align:right;font-family:Bender-Regular;font-size:1rem}
+.scroll-indicator .site-name{text-align:right;font-family:Novecentosanswide-Medium;font-size:.375rem;letter-spacing:.5em}
+.scroll-indicator .scroll-hint{text-align:right;font-family:Novecentosanswide-DemiBold;font-size:1rem;letter-spacing:.1em}
+
+.scroll-down{position:absolute;z-index:6;left:50%;bottom:3rem;transform:translateX(-50%);text-align:center;cursor:pointer}
+.scroll-down .scroll-text{font-family:Novecentosanswide-DemiBold;font-size:.75rem;letter-spacing:.2em;color:var(--text-gray);margin-bottom:.5rem}
+.scroll-down .scroll-arrow{width:1.5rem;margin:0 auto;animation:scrollBounce 2s infinite}
+@keyframes scrollBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(.5rem)}}
+
+/* ===== ANIMATIONS ===== */
+.fade-in{opacity:0;transform:translateY(1.5rem);transition:opacity .6s,transform .6s}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.fade-in-left{opacity:0;transform:translateX(-2rem);transition:opacity .6s,transform .6s}
+.fade-in-left.visible{opacity:1;transform:translateX(0)}
+.fade-in-right{opacity:0;transform:translateX(2rem);transition:opacity .6s,transform .6s}
+.fade-in-right.visible{opacity:1;transform:translateX(0)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .navbar{height:3.5rem}
+  .nav-links{display:none}
+  .hero-title-text{font-size:3.5rem}
+  .info-banner{width:50%;right:2rem;top:5rem;height:50%}
+  .info-left{width:40%}
+  .operator-char-img{left:50%}
+  .world-concepts{width:30rem;left:2rem}
+  .world-detail{left:45%;width:25rem}
+  .more-grid{grid-template-columns:1fr}
+  .side-dots{display:none}
+  .scroll-indicator{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOADING SCREEN ===== -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-inner">
+    <div class="loading-logo">ARKNIGHTS</div>
+    <div class="loading-bar-track">
+      <div class="loading-bar-fill" id="loadingBar"></div>
+    </div>
+    <div class="loading-text" id="loadingText">LOADING - 0% .....</div>
+    <div class="loading-info">HTTPS://AK.HYPERGRYPH.COM/</div>
+  </div>
+</div>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="navbar nav-transparent" id="navbar">
+  <div class="navbar-logo">
+    <svg viewBox="0 0 254 119"><path fill-rule="evenodd" fill="currentColor" d="M252.707 55.849c-.711-.216-1.421-.44-2.13-.66-.154-.047-.307-.091-.461-.137a61.773 61.773 0 01-2.292-.737c-.759-.261-1.534-.477-2.286-.762-.374-.141-.767-.234-1.149-.356-.478-.154-.95-.325-1.428-.472-2.041-.625-4.055-1.335-6.09-1.978-.403-.128-.798-.283-1.202-.412-.382-.123-.771-.227-1.156-.338-.079-.023-.162-.03-.235-.06-1.48-.578-3.015-.991-4.518-1.497l-.95-.324-.066-2.793c.17.031.349.045.516.101.454.154.901.335 1.356.49.341.117.691.205 1.035.315.479.151.953.311 1.432.465 1.125.364 2.251.73 3.378 1.09.593.189 1.188.373 1.78.56.573.182 1.145.376 1.714.572 1.289.443 2.581.882 3.885 1.278.672.204 1.337.428 2.008.631.694.211 1.38.443 2.068.675.669.225 1.331.469 2.001.689.267.086.553.111.821.196.725.232 1.444.481 2.167.726.056.018.103.059.164.096v2.699c-.139-.021-.256-.024-.362-.057zM211.38 44.452c-.35.478-.776.899-1.29 1.231-.375.242-.759.475-1.165.615-.772.268-1.571.352-2.353-.029a1.658 1.658 0 01-.745-.686 3.808 3.808 0 01-.286-.602c-.234-.688-.51-1.364-.585-2.097-.011-.118-.067-.231-.106-.346-.038-.114-.1-.225-.117-.343-.163-1.109-.615-2.135-.916-3.204-.394-1.402-.867-2.782-1.244-4.188-.257-.955-.567-1.892-.852-2.837-.122-.405-.231-.814-.361-1.216-.111-.344-.242-.68-.369-1.018-.239-.638-.481-1.276-.722-1.913l.088-.096c.263.136.527.262.784.408.379.215.748.452 1.145.636.252.117.476.287.719.423 1.221.684 2.434 1.384 3.53 2.272.366.296.714.632 1.143.857.083.043.14.141.208.216.082.089.143.221.243.266.405.184.642.545.93.849.685.723 1.327 1.486 1.859 2.332.257.408.502.828.684 1.272.231.56.395 1.147.576 1.727.047.151.05.318.066.477.044.381.09.761.125 1.144a2.3 2.3 0 01-.004.423c-.058.662-.098 1.326-.3 1.969-.164.519-.373 1.027-.685 1.458z"/></svg>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#hero" class="active" data-section="0"><div class="nav-en">INDEX</div><div class="nav-zh">首页</div></a>
+    <a href="#info" data-section="1"><div class="nav-en">INFORMATION</div><div class="nav-zh">情报</div></a>
+    <a href="#operator" data-section="2"><div class="nav-en">OPERATOR</div><div class="nav-zh">干员</div></a>
+    <a href="#world" data-section="3"><div class="nav-en">WORLD</div><div class="nav-zh">设定</div></a>
+    <a href="#media" data-section="4"><div class="nav-en">MEDIA</div><div class="nav-zh">泰拉万象</div></a>
+    <a href="#more" data-section="5"><div class="nav-en">MORE</div><div class="nav-zh">更多内容</div></a>
+  </div>
+  <div class="nav-icons">
+    <div class="nav-icon" title="社交">
+      <svg viewBox="0 0 27 35" fill="currentColor"><path d="M13.5 0C6.044 0 0 6.044 0 13.5c0 9.942 13.5 21.5 13.5 21.5S27 23.442 27 13.5C27 6.044 20.956 0 13.5 0zm0 18.5c-2.761 0-5-2.239-5-5s2.239-5 5-5 5 2.239 5 5-2.239 5-5 5z"/></svg>
+    </div>
+    <div class="nav-icon sound-icon" title="声音">
+      <svg viewBox="0 0 30 34" fill="currentColor"><path d="M15 0C6.716 0 0 6.716 0 15s6.716 15 15 15 15-6.716 15-15S23.284 0 15 0zm0 2.5a12.5 12.5 0 010 25V2.5zM10 10v14l10-7-10-7z"/></svg>
+    </div>
+    <div class="nav-icon" title="用户">
+      <svg viewBox="0 0 28 34" fill="currentColor"><path d="M14 0C6.268 0 0 6.268 0 14s6.268 14 14 14 14-6.268 14-14S21.732 0 14 0zm0 4a5 5 0 110 10 5 5 0 010-10zm0 24c-4.418 0-8.36-1.876-11.083-4.856C5.58 22.28 9.554 21 14 21s8.42 1.28 11.083 2.144C22.36 26.124 18.418 28 14 28z"/></svg>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== SIDE DOTS ===== -->
+<div class="side-dots" id="sideDots">
+  <div class="side-dot active" data-section="0"></div>
+  <div class="side-dot" data-section="1"></div>
+  <div class="side-dot" data-section="2"></div>
+  <div class="side-dot" data-section="3"></div>
+  <div class="side-dot" data-section="4"></div>
+  <div class="side-dot" data-section="5"></div>
+</div>
+
+<!-- ===== MAIN PAGE ===== -->
+<div class="page-wrapper" id="pageWrapper">
+
+  <!-- ===== SECTION 0: HERO ===== -->
+  <section class="section hero-section" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-mask-left"></div>
+    <div class="hero-mask-right"></div>
+    <div class="hero-bottom-gradient"></div>
+    
+    <div class="hero-content fade-in">
+      <div class="hero-title">
+        <div class="hero-title-text">ARKNIGHTS</div>
+        <div class="hero-title-sub">
+          <span class="rhodes">RHODES ISLAND</span>
+          <span class="url-text">HTTPS://AK.HYPERGRYPH.COM/</span>
+        </div>
+      </div>
+      <div class="hero-copyright">
+        <svg viewBox="0 0 166 18" fill="currentColor"><text x="0" y="14" font-family="Bender-Regular" font-size="8">© 2017-2026 HYPERGRYPH. All Rights Reserved.</text></svg>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-qr">
+        <div class="hero-qr-label">
+          <span>扫</span><span>码</span><span>下</span><span>载</span>
+        </div>
+        <img class="hero-qr-img" src="https://web.hycdn.cn/arknights/official/_next/static/media/qrcode_download.90ed578c.png" alt="qr"/>
+      </div>
+      <img style="height:4rem;width:auto" src="https://web.hycdn.cn/arknights/official/_next/static/media/age_rating.61c75d20.png" alt="rating"/>
+    </div>
+
+    <div class="scroll-indicator">
+      <div class="page-num" id="pageNum">00</div>
+      <div class="page-total" id="pageTotal">// 00 / 05</div>
+      <div class="site-name">ARKNIGHTS</div>
+    </div>
+
+    <div class="scroll-down" onclick="scrollToSection(1)">
+      <div class="scroll-text">SCROLL</div>
+      <svg class="scroll-arrow" viewBox="0 0 7 15" fill="currentColor" style="width:1rem;transform:rotate(90deg)"><path d="M6.5 7.5L0 15V0z"/></svg>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 1: INFORMATION ===== -->
+  <section class="section info-section" id="info">
+    <div class="info-inner">
+      <div class="info-banner">
+        <div class="swiper info-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><a href="https://ak.hypergryph.com/news/4923" target="_blank"><img src="https://web.hycdn.cn/upload/image/20260903/c2bbbe8c0996b87002fc450dba1ba697.jpg" alt=""/></a></div>
+            <div class="swiper-slide"><a href="https://ak.hypergryph.com/news/9681" target="_blank"><img src="https://web.hycdn.cn/upload/image/20260828/e59e8bf7c4da71eba98930cb5a2d4eb4.jpg" alt=""/></a></div>
+            <div class="swiper-slide"><a href="https://ak.hypergryph.com/news/7369" target="_blank"><img src="https://web.hycdn.cn/upload/image/20260820/615e10d0c5741954d190ba2b1bca19f2.jpg" alt=""/></a></div>
+            <div class="swiper-slide"><a href="https://ak.hypergryph.com/activity/fuse-bead-gallery/?source_from=official" target="_blank"><img src="https://web.hycdn.cn/upload/image/20260723/fcabcd3067bceceef1f2791e6f2a869a.jpg" alt=""/></a></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-left">
+        <div class="info-left-inner">
+          <div class="info-bg-overlay"></div>
+          <div class="info-title-bg">BREAKING NEWS</div>
+          
+          <div class="news-tabs">
+            <div class="news-tab active"><span>最新</span></div>
+            <div class="news-tab"><span>公告</span></div>
+            <div class="news-tab"><span>活动</span></div>
+            <div class="news-tab"><span>新闻</span></div>
+          </div>
+
+          <div class="news-list">
+            <div class="news-item">
+              <div class="news-cat">活动</div>
+              <div class="news-meta">
+                <div class="news-date">2026 // 09 / 04</div>
+                <div class="news-title-text">「月行水上」创作征集活动开启</div>
+              </div>
+            </div>
+            <div class="news-item">
+              <div class="news-cat">公告</div>
+              <div class="news-meta">
+                <div class="news-date">2026 // 09 / 02</div>
+                <div class="news-title-text">[明日方舟]09月04日06:00版本更新停机维护公告</div>
+              </div>
+            </div>
+            <div class="news-item">
+              <div class="news-cat">活动</div>
+              <div class="news-meta">
+                <div class="news-date">2026 // 08 / 29</div>
+                <div class="news-title-text">[活动预告]【明日方舟 × 女神异闻录３ Reload】「月行水上」限时活动即将开启</div>
+              </div>
+            </div>
+          </div>
+          <a href="https://ak.hypergryph.com/news" target="_blank" class="news-more-btn">
+            <span>READ MORE</span>
+            <svg class="arrow" viewBox="0 0 7 15" fill="currentColor"><path d="M6.5 7.5L0 15V0z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="breaking-news fade-in">
+        <div class="bn-label"><span>BREAKING NEWS</span></div>
+        <div class="bn-title">「月行水上」创作征集活动开启</div>
+        <div class="bn-date">2026 // 09 / 04</div>
+        <div class="bn-url">HTTPS://AK.HYPERGRYPH.COM/</div>
+        <a href="https://ak.hypergryph.com/news/4923" target="_blank" class="bn-btn">
+          <span>更多情报 READ MORE</span>
+          <svg class="arrow" viewBox="0 0 7 15" fill="currentColor"><path d="M6.5 7.5L0 15V0z"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2: OPERATOR ===== -->
+  <section class="section operator-section" id="operator">
+    <div class="operator-bg"></div>
+    <div class="operator-char-img fade-in-right">
+      <img src="https://web.hycdn.cn/arknights/official/_next/static/media/kaltsit_e1.a53cfc2e.png" alt="Kal'tsit" style="transform-origin:50.78% 27.34%;transform:translate(-39%,-5.86%) scale(1.3)"/>
+    </div>
+    <div class="operator-gradient-bottom"></div>
+
+    <div class="operator-header fade-in-left">
+      <div class="op-prefix">RHODES ISLAND ://</div>
+      <div class="op-title">PROFILE</div>
+    </div>
+
+    <div class="operator-info fade-in">
+      <div class="operator-name-block">
+        <div class="operator-name-bg"><span>KAL'TSIT</span></div>
+        <div class="operator-name-row">
+          <div>
+            <div class="operator-name-en">KAL'TSIT</div>
+            <div class="operator-name-zh">凯尔希</div>
+          </div>
+          <div class="operator-faction">
+            <img src="https://web.hycdn.cn/arknights/official/_next/static/media/rhodes_island.18d9416c.png" alt="RHODES ISLAND"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="operator-voice">
+        <div class="voice-box">
+          <div class="voice-icon">
+            <svg viewBox="0 0 44 44" fill="currentColor"><circle cx="22" cy="22" r="20" fill="none" stroke="currentColor" stroke-width="2"/><rect x="20" y="10" width="4" height="17" rx="2"/><rect x="12" y="16" width="4" height="10" rx="2"/><rect x="28" y="16" width="4" height="10" rx="2"/><rect x="8" y="20" width="4" height="4" rx="2"/><rect x="32" y="20" width="4" height="4" rx="2"/></svg>
+          </div>
+          <div>
+            <div class="voice-label">CHARACTER VOICE</div>
+            <div class="voice-name">日笠阳子</div>
+            <div style="font-family:SourceHanSans-Regular;font-size:.75rem;color:#666;padding-left:.75rem">刘雪</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="operator-desc">罗德岛最高管理者之一，阿米娅的直接辅导者。
+罗德岛医疗部门的总负责人。
+作为罗德岛的老成员，凯尔希医生是在阿米娅背后最稳固的援护者。</div>
+
+      <div class="operator-swiper-wrap">
+        <div class="swiper operator-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><div class="operator-card active"><div class="card-corner"></div><div class="card-border"></div><div class="card-img"><img src="https://web.hycdn.cn/arknights/official/_next/static/media/kaltsit.05c0f5e1.png" alt="凯尔希"/></div><div class="card-name"><span>凯尔希</span></div></div></div>
+            <div class="swiper-slide"><div class="operator-card"><div class="card-corner"></div><div class="card-border"></div><div class="card-img"><img src="https://web.hycdn.cn/arknights/official/_next/static/media/amiya.a410de75.png" alt="阿米娅"/></div><div class="card-name"><span>阿米娅</span></div></div></div>
+            <div class="swiper-slide"><div class="operator-card"><div class="card-corner"></div><div class="card-border"></div><div class="card-img"><img src="https://web.hycdn.cn/arknights/official/_next/static/media/chen.4d5cd8a0.png" alt="陈"/></div><div class="card-name"><span>陈</span></div></div></div>
+            <div class="swiper-slide"><div class="operator-card"><div class="card-corner"></div><div class="card-border"></div><div class="card-img"><img src="https://web.hycdn.cn/arknights/official/_next/static/media/texas.5a198d4c.png" alt="德克萨斯"/></div><div class="card-name"><span>德克萨斯</span></div></div></div>
+            <div class="swiper-slide"><div class="operator-card"><div class="card-corner"></div><div class="card-border"></div><div class="card-img"><img src="https://web.hycdn.cn/arknights/official/_next/static/media/exusiai.ff3d47d4.png" alt="能天使"/></div><div class="card-name"><span>能天使</span></div></div></div>
+            <div class="swiper-slide"><div class="operator-card"><div class="card-corner"></div><div class="card-border"></div><div class="card-img"><img src="https://web.hycdn.cn/arknights/official/_next/static/media/ptilopsis.0483cb6d.png" alt="白面鸮"/></div><div class="card-name"><span>白面鸮</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="elite-phases">
+      <div class="elite-phase active">
+        <svg viewBox="0 0 127.7 77.9" fill="currentColor"><path d="M44.7 55.5l83-55.5-9.9 22.4-83.1 55.5 10-22.4z"/><path d="M83.1 55.5L0 0l9.9 22.4L93 77.9l-9.9-22.4z"/></svg>
+      </div>
+      <div class="elite-phase">
+        <svg viewBox="0 0 127.7 103.7" fill="currentColor"><path d="M44.7 81.4l83-55.6-9.9 22.4-83.1 55.5 10-22.3z"/><path d="M83.1 81.4L0 25.8l9.9 22.4L93 103.7l-9.9-22.3z"/><path d="M44.7 55.5l83-55.5-9.9 22.4-83.1 55.5 10-22.4z"/><path d="M83.1 55.5L0 0l9.9 22.4L93 77.9l-9.9-22.4z"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: WORLD ===== -->
+  <section class="section world-section" id="world">
+    <div class="world-bg"></div>
+    
+    <div class="world-concepts" id="worldConcepts">
+      <div class="concept-item" style="transition-delay:0ms">
+        <div class="concept-bg-text">ORIGINIUMS</div>
+        <div class="concept-zh">源石</div>
+        <div class="concept-en">ORIGINIUMS</div>
+      </div>
+      <div class="concept-item" style="transition-delay:200ms">
+        <div class="concept-bg-text">ORIGINIUM ARTS</div>
+        <div class="concept-zh">源石技艺</div>
+        <div class="concept-en">ORIGINIUM ARTS</div>
+      </div>
+      <div class="concept-item" style="transition-delay:400ms">
+        <div class="concept-bg-text">REUNION</div>
+        <div class="concept-zh">整合运动</div>
+        <div class="concept-en">REUNION</div>
+      </div>
+      <div class="concept-item" style="transition-delay:600ms">
+        <div class="concept-bg-text">INFECTED</div>
+        <div class="concept-zh">感染者</div>
+        <div class="concept-en">INFECTED</div>
+      </div>
+      <div class="concept-item" style="transition-delay:800ms">
+        <div class="concept-bg-text">NOMADIC CITY</div>
+        <div class="concept-zh">移动城邦</div>
+        <div class="concept-en">NOMADIC CITY</div>
+      </div>
+      <div class="concept-item" style="transition-delay:1000ms">
+        <div class="concept-bg-text">RHODES ISLAND</div>
+        <div class="concept-zh">罗德岛</div>
+        <div class="concept-en">RHODES ISLAND</div>
+      </div>
+    </div>
+
+    <div class="world-arrows left">
+      <svg viewBox="0 0 7 15" fill="currentColor" style="transform:rotate(180deg)"><path d="M6.5 7.5L0 15V0z"/></svg>
+    </div>
+    <div class="world-arrows right">
+      <svg viewBox="0 0 7 15" fill="currentColor"><path d="M6.5 7.5L0 15V0z"/></svg>
+    </div>
+
+    <div class="world-bottom-text">WORLD</div>
+
+    <div class="world-progress">
+      <div class="progress-track">
+        <div class="progress-seg" style="background:var(--cyan)"></div>
+        <div class="progress-seg"></div>
+        <div class="progress-seg"></div>
+        <div class="progress-seg"></div>
+        <div class="progress-seg"></div>
+        <div class="progress-seg"></div>
+      </div>
+    </div>
+
+    <div class="world-back-btn">
+      <svg viewBox="0 0 7 15" fill="currentColor" style="width:1rem;transform:rotate(180deg)"><path d="M6.5 7.5L0 15V0z"/></svg>
+      <div>
+        <div class="back-zh">返回</div>
+        <div class="back-en">GO BACK</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4: MEDIA ===== -->
+  <section class="section media-section" id="media">
+    <div class="media-grid">
+      <div class="media-card" style="width:22%;height:52%;left:11%;top:33%">
+        <img class="media-card-img" src="https://web.hycdn.cn/arknights/official/_next/static/media/monster_siren_active.8f01230d.png" alt=""/>
+        <div class="media-card-overlay"></div>
+        <div class="media-card-label">
+          <img src="https://web.hycdn.cn/arknights/official/_next/static/media/logo_monster_siren.27beba82.png" alt=""/>
+          <span>MONSTER SIREN</span>
+        </div>
+      </div>
+      <div class="media-card" style="width:27%;height:52%;left:18%;top:1%">
+        <img class="media-card-img" src="https://web.hycdn.cn/arknights/official/_next/static/media/gallery_active.d45cfc72.png" alt=""/>
+        <div class="media-card-overlay"></div>
+        <div class="media-card-label">
+          <img src="https://web.hycdn.cn/arknights/official/_next/static/media/logo_gallery.08a04a01.png" alt=""/>
+          <span>GALLERY</span>
+        </div>
+      </div>
+      <div class="media-card" style="width:35%;height:38%;left:59%;top:22%">
+        <img class="media-card-img" src="https://web.hycdn.cn/arknights/official/_next/static/media/operator_active.d697ef2d.png" alt=""/>
+        <div class="media-card-overlay"></div>
+        <div class="media-card-label">
+          <img src="https://web.hycdn.cn/arknights/official/_next/static/media/logo_operator.c6543e50.png" alt=""/>
+          <span>OPERATOR</span>
+        </div>
+      </div>
+      <div class="media-card" style="width:47%;height:39%;left:54%;top:63%">
+        <img class="media-card-img" src="https://web.hycdn.cn/arknights/official/_next/static/media/video_active.693c91f3.png" alt=""/>
+        <div class="media-card-overlay"></div>
+        <div class="media-card-label">
+          <img src="https://web.hycdn.cn/arknights/official/_next/static/media/logo_video.c1de0303.png" alt=""/>
+          <span>VIDEO</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="media-center-panel">
+      <div class="media-center-title">ABOUT TERRA</div>
+      <div class="media-center-subtitle">泰拉万象</div>
+      <div class="media-center-desc">请选择您要查看的内容</div>
+      <div class="media-center-url">HTTPS://AK.HYPERGRYPH.COM/</div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 5: MORE ===== -->
+  <section class="section more-section" id="more">
+    <div class="more-inner">
+      <div class="more-grid">
+        <div class="more-card">
+          <div class="card-bg" style="background:#1a1a1a"></div>
+          <div class="card-content">
+            <div class="card-icon" style="background-image:url(https://web.hycdn.cn/arknights/official/_next/static/media/icon-integrated_strategies.05cfb26b.png)"></div>
+            <div class="card-name">集成战略</div>
+            <div class="card-en">INTEGRATED STRATEGIES</div>
+            <div class="card-view-more">VIEW MORE &gt;</div>
+          </div>
+        </div>
+        <div class="more-card">
+          <div class="card-bg" style="background:#1a1a1a"></div>
+          <div class="card-content">
+            <div class="card-icon" style="background-image:url(https://web.hycdn.cn/arknights/official/_next/static/media/icon-reclamation_algorithm.54ea704e.png)"></div>
+            <div class="card-name">生息演算</div>
+            <div class="card-en">RECLAMATION ALGORITHM</div>
+            <div class="card-view-more">VIEW MORE &gt;</div>
+          </div>
+        </div>
+        <div class="more-card">
+          <div class="card-bg" style="background:#1a1a1a"></div>
+          <div class="card-content">
+            <div class="card-icon" style="background-image:url(https://web.hycdn.cn/arknights/official/_next/static/media/icon-animation.4885daff.png)"></div>
+            <div class="card-name">衍生动画</div>
+            <div class="card-en">ANIMATION</div>
+            <div class="card-view-more">VIEW MORE &gt;</div>
+          </div>
+        </div>
+        <div class="more-card">
+          <div class="card-bg" style="background:#1a1a1a"></div>
+          <div class="card-content">
+            <div class="card-icon" style="background-image:url(https://web.hycdn.cn/arknights/official/_next/static/media/icon-terra_historicus.fa655671.png)"></div>
+            <div class="card-name">泰拉记事社</div>
+            <div class="card-en">TERRA HISTORICUS</div>
+            <div class="card-view-more">VIEW MORE &gt;</div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;bottom:3rem;font-family:Novecentosanswide-Bold;font-size:1rem;letter-spacing:.3em;color:#555">MORE CONTENT</div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <section class="footer-section">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg viewBox="0 0 254 119" fill="currentColor"><path fill-rule="evenodd" d="M252.707 55.849c-.711-.216-1.421-.44-2.13-.66-.154-.047-.307-.091-.461-.137a61.773 61.773 0 01-2.292-.737c-.759-.261-1.534-.477-2.286-.762-.374-.141-.767-.234-1.149-.356-.478-.154-.95-.325-1.428-.472-2.041-.625-4.055-1.335-6.09-1.978-.403-.128-.798-.283-1.202-.412-.382-.123-.771-.227-1.156-.338-.079-.023-.162-.03-.235-.06-1.48-.578-3.015-.991-4.518-1.497l-.95-.324-.066-2.793c.17.031.349.045.516.101.454.154.901.335 1.356.49.341.117.691.205 1.035.315.479.151.953.311 1.432.465 1.125.364 2.251.73 3.378 1.09.593.189 1.188.373 1.78.56.573.182 1.145.376 1.714.572 1.289.443 2.581.882 3.885 1.278.672.204 1.337.428 2.008.631.694.211 1.38.443 2.068.675.669.225 1.331.469 2.001.689.267.086.553.111.821.196.725.232 1.444.481 2.167.726.056.018.103.059.164.096v2.699c-.139-.021-.256-.024-.362-.057z"/></svg>
+      </div>
+      <div class="footer-loading">
+        <span>LOADING -</span>
+        <span id="footerPercent">100</span>
+        <span>%</span>
+        <span style="margin-left:.5rem">......</span>
+        <div class="loading-anim"><span></span><span></span><span></span></div>
+      </div>
+      <div class="footer-url">ARKNIGHTS // &nbsp;&nbsp;&nbsp;&nbsp;https://ak.hypergryph.com/</div>
+    </div>
+  </section>
+
+</div><!-- /page-wrapper -->
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+// ===== LOADING ANIMATION =====
+(function(){
+  const bar = document.getElementById('loadingBar');
+  const text = document.getElementById('loadingText');
+  const screen = document.getElementById('loadingScreen');
+  let p = 0;
+  const iv = setInterval(()=>{
+    p += Math.random()*15+5;
+    if(p>100) p=100;
+    bar.style.width = p+'%';
+    text.textContent = 'LOADING - '+Math.round(p)+'% .....';
+    if(p>=100){
+      clearInterval(iv);
+      setTimeout(()=>{
+        screen.classList.add('hidden');
+        document.getElementById('pageWrapper').classList.add('loaded');
+        animateSection(0);
+      },600);
+    }
+  },200);
+})();
+
+// ===== SWIPERS =====
+const infoSwiper = new Swiper('.info-swiper',{
+  loop:true,
+  autoplay:{delay:4000,disableOnInteraction:false},
+  effect:'fade',
+  fadeEffect:{crossFade:true},
+  speed:800,
+});
+const operatorSwiper = new Swiper('.operator-swiper',{
+  slidesPerView:5,
+  spaceBetween:8,
+  freeMode:true,
+});
+
+// ===== SCROLL MANAGEMENT =====
+const sections = document.querySelectorAll('.section');
+const dots = document.querySelectorAll('.side-dot');
+const navLinks = document.querySelectorAll('.nav-links a');
+const pageNum = document.getElementById('pageNum');
+const pageTotal = document.getElementById('pageTotal');
+const navbar = document.getElementById('navbar');
+let currentSection = 0;
+
+function scrollToSection(idx){
+  if(idx<0||idx>=sections.length) return;
+  sections[idx].scrollIntoView({behavior:'smooth'});
+}
+
+dots.forEach(d=>d.addEventListener('click',()=>scrollToSection(+d.dataset.section)));
+navLinks.forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();scrollToSection(+a.dataset.section)})});
+
+function setActiveSection(idx){
+  if(idx===currentSection) return;
+  currentSection=idx;
+  dots.forEach(d=>d.classList.toggle('active',+d.dataset.section===idx));
+  navLinks.forEach(a=>a.classList.toggle('active',+a.dataset.section===idx));
+  const n=String(idx).padStart(2,'0');
+  pageNum.textContent=n;
+  pageTotal.textContent='// '+n+' / 05';
+  navbar.classList.toggle('nav-transparent',idx===0);
+  animateSection(idx);
+}
+
+// Intersection Observer for section detection
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && e.intersectionRatio>0.4){
+      const idx=[...sections].indexOf(e.target);
+      if(idx>=0) setActiveSection(idx);
+    }
+  });
+},{threshold:[0.4,0.6]});
+sections.forEach(s=>observer.observe(s));
+
+// ===== ANIMATIONS =====
+function animateSection(idx){
+  const sec = sections[idx];
+  if(!sec) return;
+  // Fade-in elements
+  sec.querySelectorAll('.fade-in,.fade-in-left,.fade-in-right').forEach(el=>{
+    setTimeout(()=>el.classList.add('visible'),200);
+  });
+  // Concept items stagger
+  if(idx===3){
+    sec.querySelectorAll('.concept-item').forEach((el,i)=>{
+      setTimeout(()=>el.classList.add('in-view'),i*150);
+    });
+  }
+  // Hero parallax
+  if(idx===0){
+    sec.classList.add('in-view');
+  }
+}
+
+// ===== SOUND TOGGLE =====
+const soundIcon = document.querySelector('.sound-icon');
+if(soundIcon){
+  let muted=true;
+  soundIcon.addEventListener('click',()=>{
+    muted=!muted;
+    soundIcon.classList.toggle('active',!muted);
+  });
+}
+
+// ===== WORLD SECTION PROGRESS =====
+const progSegs = document.querySelectorAll('.progress-seg');
+progSegs.forEach((seg,i)=>{
+  seg.addEventListener('click',()=>{
+    progSegs.forEach((s,j)=>{
+      s.style.background=j<=i?'var(--cyan)':'#5a5a5a';
+    });
+  });
+});
+</script>
+</body>
+</html>
