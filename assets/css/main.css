@@ -1,16 +1,16 @@
 /* ===== FONTS ===== */
-@font-face{font-family:Novecentosanswide-Medium;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Novecentosanswide-Medium.7a5c757a.woff2) format("woff2")}
-@font-face{font-family:Novecentosanswide-DemiBold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Novecentosanswide-DemiBold.e7b6abe4.woff2) format("woff2")}
-@font-face{font-family:Novecentosanswide-Bold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Novecentosanswide-Bold.9c78a9fd.woff2) format("woff2")}
-@font-face{font-family:Novecentosanswide-UltraBold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Novecentosanswide-UltraBold.e5e00ac9.woff2) format("woff2")}
-@font-face{font-family:Bender-Regular;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Bender-Regular.6950ba72.woff2) format("woff2")}
-@font-face{font-family:Bender-Bold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Bender-Bold.b4c7998a.woff2) format("woff2")}
-@font-face{font-family:Oswald-Medium;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Oswald-Medium.99836e81.woff2) format("woff2")}
-@font-face{font-family:Oswald-DemiBold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/Oswald-DemiBold.633163ca.woff2) format("woff2")}
-@font-face{font-family:SourceHanSans-Regular;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/SourceHanSansSC-Regular.850c7fae.woff2) format("woff2")}
-@font-face{font-family:SourceHanSans-Bold;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/SourceHanSansSC-Bold.5255c6b6.woff2) format("woff2")}
-@font-face{font-family:SourceHanSans-Heavy;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/SourceHanSansSC-Heavy.a894e685.woff2) format("woff2")}
-@font-face{font-family:SourceHanSans-Medium;src:url(https://web.hycdn.cn/arknights/official/_next/static/media/SourceHanSansSC-Medium.ccb4ab24.woff2) format("woff2")}
+@font-face{font-family:Novecentosanswide-Medium;src:url(../fonts/Novecentosanswide-Medium.7a5c757a.woff2) format("woff2")}
+@font-face{font-family:Novecentosanswide-DemiBold;src:url(../fonts/Novecentosanswide-DemiBold.e7b6abe4.woff2) format("woff2")}
+@font-face{font-family:Novecentosanswide-Bold;src:url(../fonts/Novecentosanswide-Bold.9c78a9fd.woff2) format("woff2")}
+@font-face{font-family:Novecentosanswide-UltraBold;src:url(../fonts/Novecentosanswide-UltraBold.e5e00ac9.woff2) format("woff2")}
+@font-face{font-family:Bender-Regular;src:url(../fonts/Bender-Regular.6950ba72.woff2) format("woff2")}
+@font-face{font-family:Bender-Bold;src:url(../fonts/Bender-Bold.b4c7998a.woff2) format("woff2")}
+@font-face{font-family:Oswald-Medium;src:url(../fonts/Oswald-Medium.99836e81.woff2) format("woff2")}
+@font-face{font-family:Oswald-DemiBold;src:url(../fonts/Oswald-DemiBold.633163ca.woff2) format("woff2")}
+@font-face{font-family:SourceHanSans-Regular;src:url(../fonts/SourceHanSansSC-Regular.850c7fae.woff2) format("woff2")}
+@font-face{font-family:SourceHanSans-Bold;src:url(../fonts/SourceHanSansSC-Bold.5255c6b6.woff2) format("woff2")}
+@font-face{font-family:SourceHanSans-Heavy;src:url(../fonts/SourceHanSansSC-Heavy.a894e685.woff2) format("woff2")}
+@font-face{font-family:SourceHanSans-Medium;src:url(../fonts/SourceHanSansSC-Medium.ccb4ab24.woff2) format("woff2")}
 
 /* ===== RESET & BASE ===== */
 :root{color-scheme:dark;--cyan:#18d1ff;--cyan-dark:#06bbff;--bg-dark:#000;--bg-gray:#272727;--text-gray:#ababab;--text-light:#d2d2d2}
@@ -70,7 +70,7 @@ button{background:none;border:none;color:inherit;cursor:pointer;font:inherit}
 
 /* ===== SECTION 0: HERO ===== */
 .hero-section{background:#000}
-.hero-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-image:url(https://web.hycdn.cn/arknights/official/_next/static/media/bg.8954cef1.jpg);background-size:cover;background-position:50%;transition:transform 8s ease-out}
+.hero-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-image:url(../media/bg.8954cef1.jpg);background-size:cover;background-position:50%;transition:transform 8s ease-out}
 .hero-section.in-view .hero-bg{transform:scale(1.05)}
 .hero-canvas{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
 .hero-mask-left{position:absolute;left:0;bottom:0;opacity:.78;width:40%;height:80%;background:linear-gradient(to right,rgba(0,0,0,.7),transparent);pointer-events:none}
@@ -129,7 +129,7 @@ button{background:none;border:none;color:inherit;cursor:pointer;font:inherit}
 
 /* ===== SECTION 2: OPERATOR ===== */
 .operator-section{background:#272727}
-.operator-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-image:url(https://web.hycdn.cn/arknights/official/_next/static/media/bg2.e562d9ae.png);background-size:cover;background-position:50%}
+.operator-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-image:url(../media/bg2.e562d9ae.png);background-size:cover;background-position:50%}
 .operator-bg::before{content:"";display:block;position:absolute;left:0;bottom:0;width:100%;height:11.25rem;background:#272727}
 .operator-char-img{position:absolute;z-index:4;left:60%;top:30%;height:100%}
 .operator-char-img img{width:auto;height:100%}
@@ -185,7 +185,7 @@ button{background:none;border:none;color:inherit;cursor:pointer;font:inherit}
 
 /* ===== SECTION 3: WORLD ===== */
 .world-section{background:#272727}
-.world-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-image:url(https://web.hycdn.cn/arknights/official/_next/static/media/bg2.e562d9ae.png);background-size:cover;background-position:50%}
+.world-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-image:url(../media/bg2.e562d9ae.png);background-size:cover;background-position:50%}
 .world-bg::before{content:"";display:block;position:absolute;left:0;bottom:0;width:100%;height:100%;background:#101010;opacity:.85}
 
 .world-concepts{position:absolute;z-index:3;left:9rem;top:20%;width:40rem}
