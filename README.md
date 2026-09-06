@@ -1,4 +1,8 @@
-# 🏰 明日方舟官网复刻 (Arknights Official Website Clone)
+# 🏰 明日方舟官网复刻
+
+[![Stars](https://img.shields.io/github/stars/fbwe425/arknights-clone?style=flat&logo=github)](https://github.com/fbwe425/arknights-clone/stargazers)
+[![License](https://img.shields.io/badge/license-MIT-green?style=flat)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat)](CONTRIBUTING.md) (Arknights Official Website Clone)
 
 > 一个高保真复刻 [明日方舟官网](https://ak.hypergryph.com/) 的前端项目，还原了原站的视觉风格、布局结构与交互动效。
 
